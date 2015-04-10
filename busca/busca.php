@@ -116,8 +116,8 @@ FROM
    (AL.aluno LIKE '$pesquisa') AND
    (l.tipo = 'E' ) AND
    (Al.status = 'N') AND
-   (L.hora >= '16:15:00') AND
-   (L.dia = '2015-04-07') " or die(mysql_error());
+   (L.hora <= '$hora') AND
+   (L.dia = '$data') " or die(mysql_error());
    $v_liberacaoAluno = mysql_query($v_libAluno);
 	$countLibAluno = mysql_num_rows($v_liberacaoAluno);
 	if ($countLibAluno > 0) {
@@ -129,6 +129,35 @@ FROM
 		 $libstatus = 0;
 	}
 	
+// select para saber se aluno tem alguma liberação de saida
+$v_libAlunoSaida = "SELECT
+   AL.aluno as aluno,
+   L.hora as hora,
+   L.dia as dia,
+   L.motivo,
+   L.tipo,
+   L.idliberacao as liberSaida,
+   AL.status
+FROM
+   liberacao_X_aluno AL INNER JOIN liberacao L ON AL.liberacao = L.idliberacao 
+   WHERE 
+   (AL.aluno LIKE '$pesquisa') AND
+   (l.tipo = 'S' ) AND
+   (Al.status = 'N') AND
+   (L.hora <= '$hora') AND
+   (L.dia = '$data') " or die(mysql_error());
+   $v_liberacaoAlunoSaida = mysql_query($v_libAlunoSaida);
+	$countLibAlunoSaida = mysql_num_rows($v_liberacaoAlunoSaida);
+	if ($countLibAlunoSaida > 0) {
+	while($reslibSaida = mysql_fetch_assoc($v_liberacaoAlunoSaida)){
+		 $libstatussaida = $reslibSaida['liberSaida'];	
+		}
+	}
+	else {
+		 $libstatussaida = 0;
+	}
+	
+	echo "$hora + $data";
 //	select que verifica se a turma do aluno tem alguma liberação
 $turmalib = $res['idturma'];
 $v_libturma = "SELECT
@@ -145,8 +174,8 @@ FROM
    (a.idcarteira LIKE '$pesquisa') AND
    (l.tipo = 'E' ) AND
    (LT.status = 'N') AND
-   (L.hora >= '16:15:00') AND
-   (L.dia = '2015-04-07') " or die(mysql_error());
+   (L.hora <= '$hora') AND
+   (L.dia = '$data') " or die(mysql_error());
 
  $v_liberacaoturma = mysql_query($v_libturma);
 	$countLibturma = mysql_num_rows($v_liberacaoturma);
@@ -163,7 +192,7 @@ at.liberacao
 FROM
 aluno_turma_liberacao at
 WHERE
-at.aluno = '$libturmaaluno' AND at.liberacao = '$libturmastatus' and at.data = '2015-04-07' and at.hora > '$libturmahora' AND at.tipo = 'E'";
+at.aluno = '$libturmaaluno' AND at.liberacao = '$libturmastatus' and at.data = '$data' and at.hora > '$libturmahora' AND at.tipo = 'E'";
 $queryAturma = mysql_query($v_alunoturma);
 $countAturma = mysql_num_rows($queryAturma);
 	}
@@ -197,8 +226,8 @@ FROM
    (a.idcarteira LIKE '$pesquisa') AND
    (l.tipo = 'S' ) AND
    (LT.status = 'N') AND
-   (L.hora >= '16:15:00') AND
-   (L.dia = '2015-04-07') " or die(mysql_error());
+   (L.hora >= '$hora') AND
+   (L.dia = '$data') " or die(mysql_error());
 	$v_liberacaoturmasaida = mysql_query($v_libturmasaida);
 	$countLibturmasaida = mysql_num_rows($v_liberacaoturmasaida);
 	if ($countLibturmasaida > 0) {
@@ -214,7 +243,7 @@ at.liberacao
 FROM
 aluno_turma_liberacao at
 WHERE
-at.aluno = $libturmaaluno AND at.liberacao = '$libturmastatus' and at.data = '2015-04-07' and at.hora > '$libturmahora' AND at.tipo = 'S'";
+at.aluno = $libturmaaluno AND at.liberacao = '$libturmastatus' and at.data = '$data' and at.hora > '$libturmahora' AND at.tipo = 'S'";
 $queryAturmasaida = mysql_query($v_alunoturmasaida);
 $countAturmasaida = mysql_num_rows($queryAturmasaida);
 	}
@@ -291,7 +320,11 @@ VALUES
 )";
 
 //update na tabela leberacao_x_turma
+$updateliberacaosaida = "UPDATE liberacao_X_aluno
+SET status = 'S'
+WHERE liberacao = '$libstatussaida' AND aluno LIKE '$pesquisa'";
 
+//======================================
 $updateliberacao = "UPDATE liberacao_X_aluno
 SET status = 'S'
 WHERE liberacao = '$libstatus' AND aluno LIKE '$pesquisa'";
@@ -333,46 +366,46 @@ VALUES ('$pesquisa', '$libturmastatus', '$data', '$hora',  'S')" ;
 												
 																							
 													if ($countAturmasaida == 0) {
-														echo "O aluno está liberado pela orientadora para sair";
+														echo "O aluno está liberado pela orientadora para sair turma1";
 														mysql_query($insertSaida);
 														mysql_query($updateliberacaoturmasaida);
 													
 																			}
-																			else {
-																				if ($countLibAluno > 0) {
-																				echo "O aluno está liberado pela orientadora para sair";
+																		else {
+																				if ($countLibAlunoSaida > 0) {
+																				echo "O aluno está liberado pela orientadora para sair aluno1" ;
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
 				
 																					} 
 																					else {
-																					echo "O aluno não está autorizado a sair";
+																					echo "O aluno está Fora do seu Horario";
 																						}
 																				}
 											
 												
 												
-												} else {
+												} else {	
 														if ( $hora > $res['saida']) {
 													echo "Aluno está dentro do horariode saida";
 													mysql_query($insertSaida);
 														}
 														else {
 															if ($countAturmasaida == 0) {
-														echo "O aluno está liberado pela orientadora para sair";
+														echo "O aluno está liberado pela orientadora para sair turma";
 														mysql_query($insertSaida);
 														mysql_query($updateliberacaoturmasaida);
 													
 																			}
 																			else {
-																				if ($countLibAluno > 0) {
-																				echo "O aluno está liberado pela orientadora para sair";
+																				if ($countLibAlunoSaida > 0) {
+																				echo "O aluno está liberado pela orientadora para sair aluno";
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
 				
 																					} 
 																					else {
-																					echo "O aluno não está autorizado a sair";
+																					echo "O aluno não está autorizado a sair 2";
 																						}
 																				}
 													  	}
