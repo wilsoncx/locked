@@ -343,7 +343,7 @@ VALUES ('$pesquisa', '$libturmastatus', '$data', '$hora',  'S')" ;
 
 		// inicio se o aluno ja entrou
 		if($count > 0){
-		    // verifica se ele tem autorização para entrar
+		    // verifica se a turma do aluno tem autorização para entrar
 		    if ($countAturma == 0) {
 				
 			echo "O aluno está liberado pela orientadora";
@@ -353,129 +353,132 @@ VALUES ('$pesquisa', '$libturmastatus', '$data', '$hora',  'S')" ;
 						} 
 						else {
 						
-						
+						//verificar se o aluno tem liberação
 								if ($countLibAluno > 0) {
-									echo "O aluno está liberado pela orientadora";
+									echo "O aluno está liberado pela orientadora 1 ";
 									mysql_query($insertEntrada);
 									mysql_query($updateliberacao);
 	
 									} 
+										
 										else {
+										//verfica se o aluno já saiu	
 											if ($countsaida > 0) {
 													
 												
+												//verifica se a turma tem autorização para sair
 																							
-													if ($countAturmasaida == 0) {
+												if ($countAturmasaida == 0) {
 														echo "O aluno está liberado pela orientadora para sair turma1";
 														mysql_query($insertSaida);
 														mysql_query($updateliberacaoturmasaida);
-													
-																			}
-																		else {
-																				if ($countLibAlunoSaida > 0) {
+																		}
+																			
+												
+																	else{
+																		//verificar se o aluno tem liberaçõ para sair
+																			if ($countLibAlunoSaida > 0){
 																				echo "O aluno está liberado pela orientadora para sair aluno1" ;
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
 				
-																					} 
-																					else {
-																					echo "O aluno está Fora do seu Horario";
 																						}
-																				}
-											
-												
-												
-												} else {	
-														if ( $hora > $res['saida']) {
-													echo "Aluno está dentro do horariode saida";
-													mysql_query($insertSaida);
-														}
-														else {
-															if ($countAturmasaida == 0) {
-														echo "O aluno está liberado pela orientadora para sair turma";
-														mysql_query($insertSaida);
-														mysql_query($updateliberacaoturmasaida);
+																				else{
+																					//verifica se ao aluno está detro do horario de saida
+																						if ($countsaida == 0) {
 													
-																			}
-																			else {
-																				if ($countLibAlunoSaida > 0) {
-																				echo "O aluno está liberado pela orientadora para sair aluno";
-																				mysql_query($insertSaida);
-																				mysql_query($updateliberacaosaida);
-				
-																					} 
-																					else {
-																					echo "O aluno não está autorizado a sair 2";
-																						}
-																				}
-													  	}
-													
-													
-												
-													}
-									
-												
-											}
-							}
-					}
-					else{
-				//inicio da verificação se aluno está liberado pela orientadora
-							if ($countAturma == 0) {
-										echo "O aluno está liberado pela orientadora turma";
-										mysql_query($insertEntrada);
-										mysql_query($updateliberacaoturma);
-												} 
-													else {
-														if ($countLibAluno > 0) {
-															echo "O aluno está liberado pela orientadora";
-															mysql_query($insertEntrada);
-															mysql_query($updateliberacao);
-
-																			} 
-																			else {
-
-						// VERIFICA SE O ALUNO ESTÁ NO HORARIO
-																					if ($hora > $res['entrada'] and $hora < $res['saida']) {
-																						echo "Aluno está dentro do horario";
-																						mysql_query($insertEntrada);
+																							if( $hora > $res['saida']) {
+																							echo "Aluno está dentro do horariode saida";
+																							mysql_query($insertSaida);
 																							}
-																							else{
-																								echo "entranda  não permitida";
+														
+														
+																								else{
+																									if ($countAturmasaida == 0) {
+																									echo "O aluno está liberado pela orientadora para sair turma";
+																									mysql_query($insertSaida);
+																									mysql_query($updateliberacaoturmasaida);
+													
+																									}			
+																			
+																										else{
+																											if ($countLibAlunoSaida > 0) {
+																												echo "O aluno está liberado pela orientadora para sair aluno";
+																												mysql_query($insertSaida);
+																												mysql_query($updateliberacaosaida);
+				
+																																		}	
+																											else{
+																											//inicio da verificação se aluno está liberado pela orientadora
+																													if ($countAturma == 0) {
+																														echo "O aluno está liberado pela orientadora turma";
+																														mysql_query($insertEntrada);
+																														mysql_query($updateliberacaoturma);
+																																} 
+																																	else {
+																																			if ($countLibAluno > 0) {
+																																				echo "O aluno está liberado pela orientadora";
+																																				mysql_query($insertEntrada);
+																																				mysql_query($updateliberacao);
+
+																																			} 
+																																				else {
+
+																																							// VERIFICA SE O ALUNO ESTÁ NO HORARIO
+																																						if ($hora > $res['entrada'] and $hora < $res['saida']) {
+																																							echo "Aluno está dentro do horario";
+																																							mysql_query($insertEntrada);
+																																								}
+																																									else{
+																																										// verifica se ele tem autorização para entrar
+																																												if ($countLibAluno > 0) {
+																																														echo "O aluno está liberado pela orientadora";
+																																														mysql_query($insertEntrada);
+																																														mysql_query($updateliberacao);
+																																											
+																																												}
+																																												else {
+																																										
+																																													
+																																										if ($countAturma == 0) {
+																																												mysql_query($insertEntrada) or die (mysql_error());
+																																												mysql_query($updateliberacaoturma) or die(mysql_error());
+																																												echo "O aluno está liberado pela orientadora turma fim";
+																																												
+																																													
+																																										}
+																																													else {
+																																														echo "entranda  não permitida fim";
+																																										
+																																														}
+																																													
+																																												}			
+																																									}
+																																					//FIM DA VERIFICAÇÃO SE O ALUNO ESTÁ NO SEU HORARIO
+																																				}
+																																		}	
+							
+							
+			
+																													}																			
+													  	
+													
+																											}
+												
 																									}
-								//FIM DA VERIFICAÇÃO SE O ALUNO ESTÁ NO SEU HORARIO
+						
+																							}
+										
+												
+																					} 
 																			}
-													}
-							
-							
-				//fim da verificação se aluno está liberado pela orientadora
-					
-				//fim do if ara descobrir se o aluno ja entrou
- }
-	}
-	else{
-	// verifica se ele tem autorização para entrar
-		if ($countLibAluno > 0) {
-				echo "O aluno está liberado pela orientadora";
-				mysql_query($insertEntrada);
-				mysql_query($updateliberacao);
+																		}
+																}
+														}
+												}
+										}
 	
-		}
-		else {
-
-			
-if ($countAturma == 0) {
-		mysql_query($insertEntrada) or die (mysql_error());
-		mysql_query($updateliberacaoturma) or die(mysql_error());
-		echo "O aluno está liberado pela orientadora turma fim";
-		
-			
-}
-			else {
-				echo "entranda  não permitida fim";
-
-				}
-			}
-		}
+	
 ?>
 </h1>
 		</div>
@@ -486,7 +489,8 @@ if ($countAturma == 0) {
 		
 		
 //ultimo
+		}
 }
-}
+
 ?>
 </html>	
