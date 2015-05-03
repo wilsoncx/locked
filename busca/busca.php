@@ -33,20 +33,21 @@
 	//Cria a SQL para fazer a consulta no banco, e onde se poe o nome do campo, trocamos pela váriavel '$campo'
 	/*Exemplo: se for selecionado o campo titulo, então ele pequisa na tabela no campo titulo,
 	se for selecionado o campo categoria ele faz a pesquisa no campo categoria da tabela*/
-$sql = "SELECT
-   a.nome as nome,
-   a.foto,
-   a.idcarteira,
-   t.nome as turma,
-   t.idturma,
-   t.turno,
-   h.h_entrada as entrada,
-   h.h_saida as saida,
-   h.idhorario
-FROM
-   aluno a INNER JOIN turma t ON a.turma = t.idturma
-   INNER JOIN horario_x_turma ht ON t.idturma = ht.idturma
-   LEFT OUTER JOIN horario h ON ht.horario = h.idhorario
+	$sql = "SELECT
+	   a.nome as nome,
+	   a.foto,
+	   a.idcarteira,
+	   a.cel_resp as fone,
+	   t.nome as turma,
+	   t.idturma,
+	   t.turno,
+	   h.h_entrada as entrada,
+	   h.h_saida as saida,
+	   h.idhorario
+	FROM
+	   aluno a INNER JOIN turma t ON a.turma = t.idturma
+	   INNER JOIN horario_x_turma ht ON t.idturma = ht.idturma
+	   LEFT OUTER JOIN horario h ON ht.horario = h.idhorario
   WHERE  idcarteira LIKE '$pesquisa' ";
 
  
@@ -67,9 +68,12 @@ FROM
   <div class="col-xs-8 col-md-3">
   	<?php
 	if ($res['foto'] == null) {
-		$foto = "aluno.png";
+		$foto = '<img src="../img/aluno.png" class="img-thumbnail" alt="Responsive image" width="100%"  height="100%" >';
+		
+		
 	} else {
-		$foto = $res['foto'];
+		$foto = '<img src="data:image/jpeg;base64,'.base64_encode( $res['foto']).'" class="img-thumbnail" alt="Responsive image" width="100%"  height="100%" >';
+  	
 	}
 
 	///verifica se aluno esta liberado no dia da semana
@@ -90,6 +94,7 @@ WHERE
 
 	//criar sql que consulta se o aluno já entrou na escola nesta data
 	$hentrada = $res['entrada'];
+	
 	$v_entrada = mysql_query("SELECT * FROM entrada WHERE data = '$data' and hora > '$hentrada' and aluno LIKE '$pesquisa' ") or die(mysql_error());
 
 	$count = mysql_num_rows($v_entrada);
@@ -157,7 +162,7 @@ FROM
 		 $libstatussaida = 0;
 	}
 	
-	echo "$hora + $data";
+	
 //	select que verifica se a turma do aluno tem alguma liberação
 $turmalib = $res['idturma'];
 $v_libturma = "SELECT
@@ -243,7 +248,7 @@ at.liberacao
 FROM
 aluno_turma_liberacao at
 WHERE
-at.aluno = $pesquisa AND at.liberacao = '$libturmastatussaida' and at.data = '$data' and at.hora <= '$hora' AND at.tipo = 'S'";
+at.aluno = $pesquisa AND at.liberacao = '$libturmastatussaida' and at.data = '$data' and at.hora <= '$hora' AND at.tipo = 'S' and status = 'S'";
 $queryAturmasaida = mysql_query($v_alunoturmasaida);
 $countAturmasaida = mysql_num_rows($queryAturmasaida);
 	echo 	 "c" . $countAturmasaida;
@@ -260,19 +265,19 @@ $countAturmasaida = mysql_num_rows($queryAturmasaida);
 	}
 	
 //=============================================
-	
+	  
 ?>
   	
-  	
-  	<img src="../img/<?php echo $foto ?>" class="img-thumbnail" alt="Responsive image" width="100%"  height="100%" >
-  	
+  	<?php echo $foto;
+  	?>
   	</div>
   <div class="col-xs-4 col-md-9 ">
 	 <div class="bg-primary"> <h2>Nome do Aluno:</h2></div>
   	<h2><?php echo $res['nome']; ?></h2>
   	</div>
-  	 <div class="col-xs-2 col-md-5 ">
-  	 <div class="bg-primary"> <h2>Serie:</h2></div>
+  	 <div class="col-xs-2 col-md-2 ">
+  	 <div class="bg-primary"> <h2>Turno:</h2></div>
+  	<h2><?php echo $res['turno']; ?></h2>
   	
   	 </div>
  <div class="col-xs-2 col-md-2 ">
@@ -280,8 +285,12 @@ $countAturmasaida = mysql_num_rows($queryAturmasaida);
   	<h2><?php echo $res['turma']; ?></h2>
   	</div>
   	 <div class="col-xs-2 col-md-2 ">
-  	 <div class="bg-primary"> <h2>Turno:</h2></div>
-  	<h2><?php echo $res['turno']; ?></h2>
+  	 <div class="bg-primary"> <h2>Entrada:</h2></div>
+  	<h2><?php echo $res['entrada']; ?></h2>
+  	</div>
+  	 <div class="col-xs-2 col-md-2">
+  	 <div class="bg-primary"> <h2>Saida:</div>
+  	<h2><?php echo $res['saida']; ?></h2>
   	</div>
   	</div>
  <br/>
@@ -289,17 +298,9 @@ $countAturmasaida = mysql_num_rows($queryAturmasaida);
  
  <div class="row">
  	<div class="col-xs-2 col-md-3"> </div>
-  	 <div class="col-xs-2 col-md-2">
-  	 <div class="bg-primary"> <h2>Entrada:</h2></div>
-  	<h2><?php echo $res['entrada']; ?></h2>
-  	</div>
   	
-  	 <div class="col-xs-2 col-md-2">
-  	 <div class="bg-primary"> <h2>Saida:</div>
-  	<h2><?php echo $res['saida']; ?></h2>
-  	</div>
   	
-  	 <div class="col-xs-2 col-md-5">
+  	 <div class="col-xs-2 col-md-9">
   	 <div class="alert-danger">
   	<h1><?php 
  
@@ -336,10 +337,23 @@ $updateliberacaoturma = "INSERT INTO aluno_turma_liberacao( aluno,liberacao,data
 VALUES ('$pesquisa', '$libturmastatus', '$data', '$hora',  'E')" ;
 //=====================================
 
-$updateliberacaoturmasaida = "INSERT INTO aluno_turma_liberacao( aluno,liberacao,data,hora,tipo) 
-VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
+$updateliberacaoturmasaida = "INSERT INTO aluno_turma_liberacao( aluno,liberacao,data,hora,tipo, status) 
+VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S', 'S')" ;
 //======================================
+$updateturmaliberacaosaida = "UPDATE liberacao_X_turma
+SET status = 'S'
+WHERE liberacao = '$libturmastatussaida' AND aluno LIKE '$pesquisa'";
 
+//======================================
+$updateturmaliberacao = "UPDATE liberacao_X_turma
+SET status = 'S'
+WHERE liberacao = '$libturmastatussaida' AND aluno LIKE '$pesquisa'";
+
+//======================================
+$fone = $res['fone'];
+
+$chsaida = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=private&u=9433&p=808745&to='$fone'&msg=Seu+filho+acaba+de+sair+da+escola+$hora+$data"); 
+$chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=private&u=9433&p=808745&to='$fone'&msg=Seu+filho+acaba+de+entrar+na+escola+$hora+$data"); 
  /// incio se aluno está no dia da semana
 	if($countsemanaaluno > 0){
 		// inicio se o aluno ja entrou
@@ -347,19 +361,34 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 		    // verifica se ele tem autorização para entrar
 		    if ($countAturma == 0) {
 				//verifica se a turma te liberação
-			echo "A turma do aluno está liberado pela orientadora";
+			echo "A turma do aluno está liberado pela orientadora para entrar";
 						mysql_query($insertEntrada);
 						mysql_query($updateliberacaoturma);
+						mysql_query($updateturmaliberacao);
+						  ?>
+							    <div class="hide">
+							    	<?php
+								    curl_exec($chentrada);
+									?>
+									</div>
+								<?php
+					
 						} 
 						else {
 						
 						//verifica se o aluno tem alguma liberação
 								if ($countLibAluno > 0) {
-									echo "O aluno está liberado pela orientadora";
+									echo "O aluno está liberado pela orientadora para entrar";
+									
 									mysql_query($insertEntrada);
 									mysql_query($updateliberacao);
-	
-									} 
+									?>
+							    <div class="hide">
+							    	<?php
+								    curl_exec($chentrada);
+									?>
+									</div>
+								<?php									} 
 								
 										else {
 												//Verifica se aluno já saiu
@@ -369,6 +398,14 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 															echo "A turma do aluno está liberado pela orientadora para sair #1 ";
 															mysql_query($insertSaida);
 															mysql_query($updateliberacaoturmasaida);
+															mysql_query($updateturmaliberacaosaida);
+															?>
+														    <div class="hide">
+														    	<?php
+															    curl_exec($chsaida);
+																?>
+																</div>
+															<?php
 													
 																			}
 																		else {
@@ -377,6 +414,13 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 																				echo "O aluno está liberado pela orientadora para sair  #1" ;
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
+																				?>
+																			    <div class="hide">
+																			    	<?php
+																				    curl_exec($chentrada);
+																					?>
+																					</div>
+																				<?php
 				
 																					} 
 																					else {
@@ -391,12 +435,27 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 														if ( $hora > $res['saida']) {
 													echo "Aluno está dentro do horario de saida #1";
 													mysql_query($insertSaida);
+													?>
+															    <div class="hide">
+															    	<?php
+																    curl_exec($chsaida);
+																	?>
+																	</div>
+																<?php
 														}
 														else {
 															if ($countAturmasaida == 0) {
 														echo "A turma do aluno está liberado pela orientadora para sair turma #2";
 														mysql_query($insertSaida);
 														mysql_query($updateliberacaoturmasaida);
+														mysql_query($updateturmaliberacaosaida);
+														?>
+														    <div class="hide">
+														    	<?php
+															    curl_exec($chsaida);
+																?>
+																</div>
+															<?php
 													
 																			}
 																			else {
@@ -404,6 +463,13 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 																				echo "O aluno está liberado pela orientadora para sair aluno #2";
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
+																				?>
+																			    <div class="hide">
+																			    	<?php
+																				    curl_exec($chsaida);
+																					?>
+																					</div>
+																				<?php
 				
 																					} 
 																					else {
@@ -423,21 +489,43 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 					else{
 				//inicio da verificação se aluno está liberado pela orientadora
 							if ($countAturma == 0) {
-										echo "A turma do aluno está liberado pela orientadora #2";
+										echo "A turma do aluno está liberado pela orientadora para entrar#2";
 										mysql_query($insertEntrada);
 										mysql_query($updateliberacaoturma);
+										mysql_query($updateturmaliberacao);
+										?>
+										    <div class="hide">
+										    	<?php
+											    curl_exec($chentrada);
+												?>
+												</div>
+											<?php
 												} 
 													else {
 														if ($countLibAluno > 0) {
-															echo "A aluno está liberado pela orientadora #2";
+															echo "A aluno está liberado pela orientadora para entrar #2";
 															mysql_query($insertEntrada);
 															mysql_query($updateliberacao);
+															?>
+															    <div class="hide">
+															    	<?php
+																    curl_exec($chentrada);
+																	?>
+																	</div>
+																<?php
 																			} 
 																			else {
 						// VERIFICA SE O ALUNO ESTÁ NO HORARIO
-																					if ($hora > $res['entrada'] and $hora < $res['saida']) {
+																					if ($hora > $res['entrada'] and $hora < $res['tolerancia']) {
 																						echo "Aluno está dentro do horario";
 																						mysql_query($insertEntrada);
+																						?>
+																						    <div class="hide">
+																						    	<?php
+																							    curl_exec($chentrada);
+																								?>
+																								</div>
+																							<?php
 																							}
 																							else{
 																								echo "entranda  não permitida #1";
@@ -456,18 +544,34 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 		
 	if ($countAturma == 0) {
 				//verifica se a turma te liberação
-			echo "A turma do aluno está liberado pela orientadora para entrar";
+			echo "A turma do aluno está liberado pela orientadora para entrar t";
 						mysql_query($insertEntrada);
 						mysql_query($updateliberacaoturma);
-						} 
+						mysql_query($updateturmaliberacao);
+  						?>
+							    <div class="hide">
+							    	<?php
+								    curl_exec($chentrada);
+									
+									?>
+									</div>
+								<?php						} 
 						else {
 						
 						//verifica se o aluno tem alguma liberação
 								if ($countLibAluno > 0) {
-									echo "O aluno está liberado pela orientadora entrar";
+									echo "O aluno está liberado pela orientadora entrar #10";
 									mysql_query($insertEntrada);
 									mysql_query($updateliberacao);
-	
+									
+							     ?>
+							    <div class="hide">
+							    	<?php
+								    curl_exec($chentrada);
+									
+									?>
+									</div>
+								<?php
 									} 
 								
 										else {
@@ -478,6 +582,14 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 															echo "A turma do aluno está liberado pela orientadora para sair #3 ";
 															mysql_query($insertSaida);
 															mysql_query($updateliberacaoturmasaida);
+															mysql_query($updateturmaliberacaosaida);
+															  ?>
+																    <div class="hide">
+																    	<?php
+																	    curl_exec($chsaida);
+																		?>
+																		</div>
+																	<?php
 													
 																			}
 																		else {
@@ -486,10 +598,17 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 																				echo "O aluno está liberado pela orientadora para sair  #1" ;
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
+																				  ?>
+																					    <div class="hide">
+																					    	<?php
+																						    curl_exec($chsaida);
+																							?>
+																							</div>
+																						<?php
 				
 																					} 
 																					else {
-																					echo "O aluno não te autorização"  . $countAturmasaida;
+																					echo "O aluno não tem autorização"  . $countAturmasaida;
 																					
 																						}
 																		}
@@ -501,6 +620,14 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 															echo "A turma do aluno está liberado pela orientadora para sair #4 ";
 															mysql_query($insertSaida);
 															mysql_query($updateliberacaoturmasaida);
+															mysql_query($updateturmaliberacaosaida);
+															?>
+															    <div class="hide">
+															    	<?php
+																    curl_exec($chsaida);
+																	?>
+																	</div>
+																<?php
 													
 																			}
 																		else {
@@ -509,6 +636,13 @@ VALUES ('$pesquisa', '$libturmastatussaida', '$data', '$hora',  'S')" ;
 																				echo "O aluno está liberado pela orientadora para sair  #4" ;
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
+																				?>
+																			    <div class="hide">
+																			    	<?php
+																				    curl_exec($chsaida);
+																					?>
+																					</div>
+																				<?php
 				
 																					} 
 																					else {

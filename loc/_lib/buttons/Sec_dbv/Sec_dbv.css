@@ -1,0 +1,8 @@
+.scButton_default { font-family: Verdana, Arial, sans-serif; font-size: 13px; color: #fcfcfc; font-weight: normal; background-color: #4D7AFF; border-color: #cdcdcd; border-style: solid; border-width: 1px; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; padding: 6px 10px; text-decoration: none;  }
+.scButton_onmouseover { font-family: Verdana, Arial, sans-serif; font-size: 13px; color: #fcfcfc; font-weight: normal; background-color: #7396FF; border-color: #cdcdcd; border-style: solid; border-width: 1px; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; padding: 6px 10px; text-decoration: none;  }
+.scButton_onmousedown { font-family: Verdana, Arial, sans-serif; font-size: 13px; color: #fcfcfc; font-weight: normal; background-color: #4D7AFF; border-color: #cdcdcd; border-style: solid; border-width: 1px; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; padding: 6px 10px; text-decoration: none;  }
+.scButton_disabled { font-family: Verdana, Arial, sans-serif; font-size: 13px; color: #6b6a6b; font-weight: normal; background-color: #4D7AFF; border-color: #cdcdcd; border-style: solid; border-width: 1px; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; padding: 6px 10px; text-decoration: none;  }
+.scLink_default { text-decoration: underline; font-family: Arial, sans-serif; font-size: 12px; color: #0000AA;  }
+.scLink_default:visited { text-decoration: underline; font-family: Arial, sans-serif; font-size: 12px; color: #0000AA;  }
+.scLink_default:active { text-decoration: underline; font-family: Arial, sans-serif; font-size: 12px; color: #0000AA;  }
+.scLink_default:hover { text-decoration: none; font-family: Arial, sans-serif; font-size: 12px; color: #0000AA;  }

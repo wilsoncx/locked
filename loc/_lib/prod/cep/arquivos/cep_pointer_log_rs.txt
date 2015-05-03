@@ -1,0 +1,23 @@
+Alegrete@nm@0@nm@
+Alvorada@nm@58468@nm@
+Bagé@nm@154272@nm@
+Cachoeira do Sul@nm@232259@nm@
+Cachoeirinha@nm@287679@nm@
+Canoas@nm@371880@nm@
+Caxias do Sul@nm@522774@nm@
+Cruz Alta@nm@867457@nm@
+Esteio@nm@922443@nm@
+Gravataí@nm@969580@nm@
+Novo Hamburgo@nm@1156441@nm@
+Passo Fundo@nm@1333112@nm@
+Pelotas@nm@1460573@nm@
+Porto Alegre@nm@1604875@nm@
+Rio Grande@nm@2467010@nm@
+Santa Cruz do Sul@nm@2575342@nm@
+Santa Maria@nm@2686703@nm@
+Santana do Livramento@nm@2841370@nm@
+Santo Ângelo@nm@2911426@nm@
+São Leopoldo@nm@2981613@nm@
+Sapucaia do Sul@nm@3152933@nm@
+Uruguaiana@nm@3242981@nm@
+Viamão@nm@3355006@nm@

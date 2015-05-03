@@ -1,0 +1,8 @@
+.scMenuHHeader { background-color: #FFFFFF }
+.scMenuHHeaderFont { color: #5674b2; font-family: Verdana, Arial, sans-serif; font-size: 13px; font-weight: normal; padding: 0; text-decoration: none; text-shadow: none }
+.ui-body-a, .ui-overlay-a, .ui-body-c, .ui-overlay-c { background-image: none }
+.ui-bar-b { color: #5674b2; font-family: Verdana, Arial, sans-serif; font-size: 13px; font-weight: normal; padding: 0; text-decoration: none; background-color: #FFFFFF; background-image: none }
+.ui-btn-up-a { background-image: none; font-family: Verdana, Arial, sans-serif; font-size: 13px; color: #000000; text-decoration: none; font-weight: normal; font-style: normal; text-shadow: none }
+.ui-btn-up-a:visited, .ui-btn-up-a a.ui-link-inherit { color: #000000 }
+.ui-btn-hover-a { background-image: none; font-family: Verdana, Arial, sans-serif; font-size: 13px; color: #000000; text-decoration: none; font-weight: normal; font-style: normal; text-shadow: none }
+.ui-btn-hover-a:visited, .ui-btn-hover-a:hover, .ui-btn-hover-a a.ui-link-inherit { color: #000000; background-color: #FFFFFF }

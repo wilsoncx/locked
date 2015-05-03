@@ -21,8 +21,7 @@
 	
 	<div class="container">
 	<h1>Colégio Adventista de São Luís</h1>
-	<h2>Controle de Acesso</h2><br />
-
+<br />
 	<div class="resultados">
 	
 	</div>
@@ -35,7 +34,7 @@
 	
 	<form id="form-pesquisa" action="busca.php" method="post" name="frmbusca">
 	<input type="text" name="pesquisa" id="pesquisa" autocomplete="off">
-    <input type="submit" name="enviar" value="Pesquisar">
+    <input type="submit" name="enviar" value="Pesquisar" class="hide">
     
     
 	</form>
