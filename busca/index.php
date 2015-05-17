@@ -20,7 +20,7 @@
 	
 	
 	<div class="container">
-	<h1>Colégio Adventista de São Luís</h1>
+	<img src="../img/logo_topo.png" />
 <br />
 	<div class="resultados">
 	

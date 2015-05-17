@@ -43,14 +43,14 @@
 	   t.turno,
 	   h.h_entrada as entrada,
 	   h.h_saida as saida,
-	   h.idhorario
+	   h.idhorario,
+	   h.h_tolerancia as tolerancia
 	FROM
 	   aluno a INNER JOIN turma t ON a.turma = t.idturma
 	   INNER JOIN horario_x_turma ht ON t.idturma = ht.idturma
 	   LEFT OUTER JOIN horario h ON ht.horario = h.idhorario
   WHERE  idcarteira LIKE '$pesquisa' ";
 
- 
   	
 	
 //	 "SELECT * FROM aluno WHERE idaluno LIKE '$pesquisa'";
@@ -349,7 +349,10 @@ $updateturmaliberacao = "UPDATE liberacao_X_turma
 SET status = 'S'
 WHERE liberacao = '$libturmastatussaida' AND aluno LIKE '$pesquisa'";
 
-//======================================
+//======imagens liberados e não liberados================================
+$imgsaidanaoliberada = '<img src="../img/saida_nao_liberada.png" />';
+$imgsaidaliberada = '<img src="../img/saida_liberada.png" />';
+//========
 $fone = $res['fone'];
 
 $chsaida = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=private&u=9433&p=808745&to='$fone'&msg=Seu+filho+acaba+de+sair+da+escola+$hora+$data"); 
@@ -395,7 +398,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 											if ($countsaida > 0) {
 													//verifica se turma tem atuorização para sair
 														if ($countAturmasaida  == 0) {
-															echo "A turma do aluno está liberado pela orientadora para sair #1 ";
+															echo $imgsaidaliberada;
 															mysql_query($insertSaida);
 															mysql_query($updateliberacaoturmasaida);
 															mysql_query($updateturmaliberacaosaida);
@@ -411,7 +414,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 																		else {
 																			//verifica se o aluno tem liberação para sair
 																				if ($countLibAlunoSaida > 0) {
-																				echo "O aluno está liberado pela orientadora para sair  #1" ;
+																				echo $imgsaidaliberada; ;
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
 																				?>
@@ -433,7 +436,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 												
 												} else {	
 														if ( $hora > $res['saida']) {
-													echo "Aluno está dentro do horario de saida #1";
+													echo $imgsaidaliberada;
 													mysql_query($insertSaida);
 													?>
 															    <div class="hide">
@@ -445,7 +448,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 														}
 														else {
 															if ($countAturmasaida == 0) {
-														echo "A turma do aluno está liberado pela orientadora para sair turma #2";
+														echo $imgsaidaliberada;
 														mysql_query($insertSaida);
 														mysql_query($updateliberacaoturmasaida);
 														mysql_query($updateturmaliberacaosaida);
@@ -460,7 +463,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 																			}
 																			else {
 																				if ($countLibAlunoSaida > 0) {
-																				echo "O aluno está liberado pela orientadora para sair aluno #2";
+																				echo $imgsaidaliberada;
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
 																				?>
@@ -473,7 +476,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 				
 																					} 
 																					else {
-																					echo "O aluno não está autorizado a sair #2";
+																					echo $imgsaidanaoliberada;
 																						}
 																				}
 													  	}
@@ -579,7 +582,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 											if ($countsaida > 0) {
 													//verifica se turma tem atuorização para sair
 														if ($countAturmasaida   == 0) {
-															echo "A turma do aluno está liberado pela orientadora para sair #3 ";
+															echo $imgsaidaliberada;
 															mysql_query($insertSaida);
 															mysql_query($updateliberacaoturmasaida);
 															mysql_query($updateturmaliberacaosaida);
@@ -595,7 +598,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 																		else {
 																			//verifica se o aluno tem liberação para sair
 																				if ($countLibAlunoSaida > 0) {
-																				echo "O aluno está liberado pela orientadora para sair  #1" ;
+																				echo $imgsaidaliberada;
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
 																				  ?>
@@ -617,7 +620,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 															}	
 											else{
 												if ($countAturmasaida   == 0) {
-															echo "A turma do aluno está liberado pela orientadora para sair #4 ";
+															echo $imgsaidaliberada;
 															mysql_query($insertSaida);
 															mysql_query($updateliberacaoturmasaida);
 															mysql_query($updateturmaliberacaosaida);
@@ -633,7 +636,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 																		else {
 																			//verifica se o aluno tem liberação para sair
 																				if ($countLibAlunoSaida > 0) {
-																				echo "O aluno está liberado pela orientadora para sair  #4" ;
+																				echo $imgsaidaliberada; 
 																				mysql_query($insertSaida);
 																				mysql_query($updateliberacaosaida);
 																				?>
@@ -646,7 +649,7 @@ $chentrada = curl_init("http://torpedus.com.br/sms/index.php?app=push&rest=priva
 				
 																					} 
 																					else {
-																					echo "O aluno sem autorização";
+																					echo "aluno sem autorização";
 																					
 																						}
 																		}
